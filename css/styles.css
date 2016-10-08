@@ -114,6 +114,15 @@ header input {
   line-height: 1.5;
 }
 
+.complete-task {
+  float: right;
+  display: inline-block;
+  margin: 0;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+}
+
 .remove-todo, .upvote, .downvote {
   height: 20px;
   width: 20px;
