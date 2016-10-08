@@ -1,8 +1,4 @@
-
-const assert = require('chai').assert
-
-describe('our test bundle', function () {
-  it('should work', function () {
-    assert(true)
-    })
-  })
+const dom = require('./dom-test')
+const ToDo = require('./todo-test')
+const toDoBox = require('./todo-box-test')
+const controller = require('./controller-test')
