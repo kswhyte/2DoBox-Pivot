@@ -3,7 +3,7 @@ const path = require('path');
 module.exports = {
   entry: {
     main: "./lib/index.js",
-    test: "mocha!./test/index.js"
+    test: "mocha!./test/unit/index.js"
   },
 
   output: {
@@ -18,7 +18,7 @@ module.exports = {
       { test: /\.scss$/, loader: "style!css!sass" }
     ]
   },
-  
+
   resolve: {
     extensions: ['', '.js', '.json', '.scss', '.css']
   }

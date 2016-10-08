@@ -1,6 +1,6 @@
 const assert = require('chai').assert
-const ToDo = require('../lib/todo')
-const toDoBox = require('../lib/todo-box')
+const ToDo = require('../../lib/todo')
+const toDoBox = require('../../lib/todo-box')
 
 
 describe('Todo', function(){

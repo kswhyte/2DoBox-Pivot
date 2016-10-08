@@ -1,8 +1,6 @@
 const assert = require('chai').assert
-const ToDo = require('../lib/todo')
-const toDoBox = require('../lib/todo-box')
-
-
+const ToDo = require('../../lib/todo')
+const toDoBox = require('../../lib/todo-box')
 
 describe('Todo-box | Unit Tests', function(){
   context('toDoBox Object', function(){
@@ -72,17 +70,3 @@ describe('Todo-box | Unit Tests', function(){
     });
   });
 });
-
-
-
-
-//
-// it('should be able to instantiate a new papaya when a jungle is created', function() {
-//   var jungle = new Jungle(500, 300);
-//   assert.isObject(jungle.papaya);
-// });
-//
-// it('should have a "launchPapaya" function', function() {
-//   var jungle = new Jungle(40, 40);
-//   assert.isFunction(jungle.launchPapaya);
-// });

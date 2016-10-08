@@ -45,8 +45,8 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	const dom = __webpack_require__(1);
-	const idea = __webpack_require__(4);
-	const ideaBox = __webpack_require__(5);
+	const ToDo = __webpack_require__(4);
+	const toDoBox = __webpack_require__(5);
 	const controller = __webpack_require__(3);
 
 /***/ },
@@ -54,15 +54,12 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	const $ = __webpack_require__(2);
-	const controller = __webpack_require__(3);
-	const Idea = __webpack_require__(4);
-	const ideaBox = __webpack_require__(5);
 
 	const dom = {
 	  $saveButton: $('#save-button'),
 	  $titleInput: $('#title-input'),
 	  $bodyInput: $('#body-input'),
-	  $ideaList: $('.idea-list'),
+	  $toDoList: $('.todo-list'),
 	  $searchBar: $('#search-bar')
 	};
 
@@ -71,80 +68,80 @@
 	});
 
 	$('#save-button').on('click', function () {
-	  ideaBox.saveButtonClick(dom.$titleInput.val(), dom.$bodyInput.val());
+	  toDoBox.saveButtonClick(dom.$titleInput.val(), dom.$bodyInput.val());
 	  controller.saveButtonClick();
 	});
 
 	$('#body-input').keypress(function (event) {
 	  if (event.which == 13) {
-	    ideaBox.addIdeaToList(idea.id, dom.$titleInput.val(), dom.$bodyInput.val());
+	    toDoBox.saveButtonClick(dom.$titleInput.val(), dom.$bodyInput.val());
 	    controller.saveButtonClick();
-	    $('#title-input').focus();
 	  }
 	});
 
-	$('.idea-list').on('focusout', '.idea-title', function () {
-	  var $id = $(this).parent().attr('id');
-	  var $newTitle = $(this).text();
-	  Idea.updateTitle($id, $newTitle);
+	$('.todo-list').on('focusout', '.todo-title', function (e) {
+	  let toDoId = parseInt(e.target.parentElement.id);
+	  let newTitle = $(this).text();
+	  ToDo.prototype.toDoTitleFocusOut(toDoId, newTitle);
+	  controller.toDoTitleFocusOut();
 	});
 
-	$('.idea-list').on('keypress', '.idea-title', function (event) {
-	  var id = $(this).parent().attr('id');
-	  var newTitle = $(this).text();
+	$('.todo-list').on('keypress', '.todo-title', function (e) {
 	  if (event.which == 13) {
 	    event.preventDefault();
 	    $(this).blur();
 	  }
 	});
 
-	$('.idea-list').on('focusout', '.body-input', function () {
-	  var $id = $(this).parent().attr('id');
-	  var $newBody = $(this).text();
-	  Idea.updateBody($id, $newBody);
+	$('.todo-list').on('focusout', '.body-input', function (e) {
+	  let toDoId = parseInt(e.target.parentElement.id);
+	  let newBody = $(this).text();
+	  ToDo.prototype.toDoBodyFocusOut(toDoId, newBody);
+	  controller.toDoBodyFocusOut();
 	});
 
-	$('.idea-list').on('keypress', '.body-input', function (event) {
-	  var id = $(this).parent().attr('id');
-	  var newBody = $(this).text();
+	$('.todo-list').on('keypress', '.body-input', function (e) {
 	  if (event.which == 13) {
 	    event.preventDefault();
 	    $(this).blur();
 	  }
 	});
 
-	$('.idea-list').on('click', '.delete-idea', function () {
-	  var id = $(this).parent().attr('id');
-	  var idea = ideabox.findIdea(id);
-	  controller.deleteIdeaFromStorage(idea);
-	  $(this).parent().remove();
+	$('.todo-list').on('click', '.remove-todo', function (e) {
+	  let toDoId = parseInt(e.target.parentElement.id);
+	  toDoBox.removeToDoButtonClick(toDoId);
+	  controller.removeToDoButtonClick();
 	});
 
-	$('.idea-list').on('click', '.upvote', function () {
-	  var idea = findIdea($(this).parent().parent().attr('id'));
-	  var $quality = $(this).siblings('p');
-
-	  //conditionals taken out
-	  storeIdea();
+	// ----------
+	$('.todo-list').on('click', 'complete-task', function (e) {
+	  let toDoId = parseInt(e.target.parentElement.id);
+	  toDoBox.completeTaskButtonClick(toDoId);
+	  controller.completeTaskButtonClick();
 	});
 
-	$('.idea-list').on('click', '.downvote', function () {
-	  var idea = findIdea($(this).parent().parent().attr('id'));
-	  var $quality = $(this).siblings('p');
+	$('.todo-list').on('click', '.upvote', function (e) {
+	  let toDoId = parseInt(e.target.parentElement.parentElement.id);
+	  ToDo.prototype.upvoteToDoButtonClick(toDoId);
+	  controller.upvoteToDoButtonClick();
+	});
 
-	  //conditionals taken out
-	  storeIdea();
+	$('.todo-list').on('click', '.downvote', function (e) {
+	  let toDoId = parseInt(e.target.parentElement.parentElement.id);
+	  ToDo.prototype.downvoteToDoButtonClick(toDoId);
+	  controller.downvoteToDoButtonClick();
 	});
 
 	$("#search-bar").keyup(function () {
-	  var filterWord = $(this).val();
-	  var notTheIdeasIWant = $('li:not(:contains(' + filterWord + '))');
-	  var theIdeaIWant = $('li:contains(' + filterWord + ')');
-	  theIdeaIWant.show();
-	  notTheIdeasIWant.hide();
+	  let filterWord = $(this).val();
+	  toDoBox.searchFilterKeyup(filterWord);
 	});
 
 	module.exports = dom;
+
+	const controller = __webpack_require__(3);
+	const ToDo = __webpack_require__(4);
+	const toDoBox = __webpack_require__(5);
 
 /***/ },
 /* 2 */
@@ -1801,78 +1798,64 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	const $ = __webpack_require__(2);
-	const Idea = __webpack_require__(4);
-	const ideaBox = __webpack_require__(5);
-	const dom = __webpack_require__(1);
 
 	const controller = {
 	  documentReady: function () {
 	    this.updateModelFromLS();
 	    this.renderModelToDom();
 	  },
-
 	  saveButtonClick: function () {
 	    this.updateLSFromModel();
 	    this.renderModelToDom();
 	    this.clearFields();
 	  },
-
-	  ideaSearchInputKeyup: function () {
+	  toDoSearchInputKeyup: function () {
 	    this.renderModelToDom();
 	  },
-
-	  deleteIdeaFromStorage: function (idea) {
-	    ideasList = ideasList.filter(function (ideasToKeep) {
-	      return ideasToKeep != idea;
-	    });
-	    localStorage.removeItem(idea);
-	    updateLSFromModel();
-	  },
-
-	  removeIdeaButtonClick: function () {
+	  removeToDoButtonClick: function () {
 	    this.renderModelToDom();
 	    this.updateLSFromModel();
 	  },
-
-	  ideaPromoteButtonClick: function () {
+	  // -------
+	  completeTaskButtonClick: function () {
 	    this.renderModelToDom();
 	    this.updateLSFromModel();
 	  },
-
-	  ideaDemoteButtonClick: function () {
+	  upvoteToDoButtonClick: function () {
 	    this.renderModelToDom();
 	    this.updateLSFromModel();
 	  },
-
-	  ideaTitleKeyup: function () {
+	  downvoteToDoButtonClick: function () {
+	    this.renderModelToDom();
 	    this.updateLSFromModel();
 	  },
-
-	  ideaBodyKeyup: function () {
+	  toDoTitleFocusOut: function () {
 	    this.updateLSFromModel();
 	  },
-
+	  toDoBodyFocusOut: function () {
+	    this.updateLSFromModel();
+	  },
+	  searchFilterKeyup: function () {
+	    this.renderModelToDom();
+	  },
 	  updateLSFromModel: function () {
-	    localStorage.setItem("ideasList", JSON.stringify(ideaBox.ideasList));
+	    localStorage.setItem("toDoList", JSON.stringify(toDoBox.toDoList));
 	  },
-
 	  updateModelFromLS: function () {
-	    retrievedIdeasList = JSON.parse(localStorage.getItem('ideasList'));
-	    if (retrievedIdeasList) {
-	      ideaBox.ideasList = retrievedIdeasList.map(function (idea) {
-	        return new Idea(idea.title, idea.body, idea.quality, idea.id);
-	        console.log('ls exists = true');
+	    retrievedToDoList = JSON.parse(localStorage.getItem('toDoList'));
+	    if (retrievedToDoList) {
+	      toDoBox.toDoList = retrievedToDoList.map(function (toDo) {
+	        return new ToDo(toDo.title, toDo.body, toDo.importance, toDo.id);
 	      });
 	    }
 	  },
-
 	  renderModelToDom: function () {
-	    $('.idea-list').html('');
-	    ideaBox.ideasList.forEach(function (idea) {
-	      $('.idea-list').prepend(idea.renderIdeaToHTML());
+	    $('.todo-list').html('');
+	    toDoBox.toDoList.forEach(function (toDo) {
+	      $('.todo-list').prepend(toDo.renderToDoToHTML());
 	    });
+	    toDoBox.filterToDos($('#search-bar').val());
 	  },
-
 	  clearFields: function () {
 	    $('#title-input').val('');
 	    $('#body-input').val('');
@@ -1883,99 +1866,125 @@
 
 	module.exports = controller;
 
-	// writeIdeas: function(ideasList) {
-	//   ideaBox.ideasList.forEach(function(idea) {
-	//     renderIdeaToHTML(idea);
-	//   });
-	// },
-
-	// storeIdea: function() {
-	//   localStorage.setItem("ideasList", JSON.stringify(ideasList));
-	// },
-
-	// updateIdeasList: function(ideasList) {
-	//   localStorage.setItem('ideasList', JSON.stringify(ideasList));
-	//   updateLSFromModel();
-	// }
+	const ToDo = __webpack_require__(4);
+	const toDoBox = __webpack_require__(5);
+	const dom = __webpack_require__(1);
 
 /***/ },
 /* 4 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	function Idea(title, body, quality = 'swill', id = Date.now()) {
+	function ToDo(title, body, importance = 'normal', id = Date.now()) {
 	  this.id = id;
 	  this.title = title;
 	  this.body = body;
-	  this.quality = quality;
+	  this.importance = importance;
 	}
-
-	Idea.prototype = {
-	  renderIdeaToHTML: function (idea) {
+	ToDo.prototype = {
+	  upvoteToDoButtonClick: function (toDoId) {
+	    this.updateImportance(toDoId, 'upvote');
+	  },
+	  downvoteToDoButtonClick: function (toDoId) {
+	    this.updateImportance(toDoId, 'downvote');
+	  },
+	  toDoTitleFocusOut(toDoId, newTitle) {
+	    this.updateTitle(toDoId, newTitle);
+	  },
+	  toDoBodyFocusOut(toDoId, newBody) {
+	    this.updateBody(toDoId, newBody);
+	  },
+	  renderToDoToHTML: function (toDo) {
 	    return `
-	      <section id=${ this.id }>
-	        <h3 contenteditable="true" class="idea-title">${ this.title }</h3>
-	        <button class="delete-idea"></button>
+	      <section class="todo-section" id=${ this.id }>
+	        <h3 contenteditable="true" class="todo-title">${ this.title }</h3>
+	        <button class="remove-todo"></button>
 	        <p contenteditable="true" class="body-input"> ${ this.body }</p>
+	        <button class="complete-task"></button>
 	        <div class="vote">
 	          <button class="upvote"></button>
 	          <article class="downvote"></article>
-	          <p class="quality-control">quality:${ this.quality }</p>
+	          <p class="importance-control">importance: ${ this.importance }</p>
 	        </div>
 	      </section>
 	    `;
 	  },
-
-	  updateTitle: function (id, newTitle) {
-	    var idea = ideaBox.findIdea(id);
-	    idea.title = newTitle;
-	    controller.updateLSFromModel();
+	  updateTitle: function (toDoId, newTitle) {
+	    let toDo = toDoBox.findToDo(toDoId);
+	    toDo.title = newTitle;
 	  },
-
-	  updateBody: function (id, newBody) {
-	    var idea = ideaBox.findIdea(id);
-	    idea.body = newBody;
-	    controller.updateLSFromModel();
+	  updateBody: function (toDoId, newBody) {
+	    let toDo = toDoBox.findToDo(toDoId);
+	    toDo.body = newBody;
 	  },
-
-	  updateQuality: function () {
-	    if ($quality.text() === 'quality: genius') {
-	      $quality.text('quality: plausible');
-	      idea.quality = 'plausible';
-	    } else if ($quality.text() === 'quality: plausible') {
-	      $quality.text('quality: swill');
-	      idea.quality = 'swill';
-	    }
-	    if ($quality.text() === 'quality: swill') {
-	      $quality.text('quality: plausible');
-	      idea.quality = 'plausible';
-	    } else if ($quality.text() === 'quality: plausible') {
-	      $quality.text('quality: genius');
-	      idea.quality = 'genius';
+	  updateImportance: function (toDoId, voteChoice) {
+	    let votePath = { 'upvote': ['none', 'low', 'normal', 'high', 'critical'], 'downvote': ['critical', 'high', 'normal', 'low', 'none'] };
+	    toDo = toDoBox.findToDo(toDoId);
+	    let index = votePath[voteChoice].indexOf(toDo.importance);
+	    let importanceList = votePath[voteChoice];
+	    if (index < 4) {
+	      index++;
+	      toDo.importance = importanceList[index];
 	    }
 	  }
 	};
 
-	module.exports = Idea;
+	module.exports = ToDo;
+
+	toDoBox = __webpack_require__(5);
 
 /***/ },
 /* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
-	const Idea = __webpack_require__(4);
+	const $ = __webpack_require__(2);
 
-	const ideaBox = {
-	  ideasList: [],
+	const toDoBox = {
+	  toDoList: [],
 	  saveButtonClick: function (titleText, bodyText) {
-	    this.addIdea(titleText, bodyText);
+	    this.addToDo(titleText, bodyText);
 	  },
-	  addIdea: function (titleInput, bodyInput) {
-	    let idea = new Idea(titleInput, bodyInput);
-	    this.ideasList.push(idea);
+	  removeToDoButtonClick: function (toDoId) {
+	    this.removeToDo(toDoId);
 	  },
-	  removeIdea: function () {}
+	  // ------
+	  completeTaskButtonClick: function (toDoId) {
+	    this.completeToDo(toDoId);
+	  },
+	  searchFilterKeyup: function (filterWord) {
+	    this.filterToDos(filterWord);
+	  },
+	  addToDo: function (titleText, bodyText) {
+	    let toDo = new ToDo(titleText, bodyText);
+	    this.toDoList.push(toDo);
+	  },
+	  removeToDo: function (toDoId) {
+	    this.toDoList = this.toDoList.filter(function (currentToDo) {
+	      return currentToDo.id != toDoId;
+	    });
+	  },
+	  // -------
+	  completeToDo: function (toDoId) {
+	    this.toDoList = this.toDoList.filter(function (currentToDo) {
+	      return currentToDo.id === toDoId;
+	    });
+	  },
+	  findToDo: function (toDoId) {
+	    let toDos = this.toDoList.filter(function (currentToDo) {
+	      return currentToDo.id === toDoId;
+	    });
+	    return toDos[0];
+	  },
+	  filterToDos: function (filterWord) {
+	    let toDoIDontWant = $('.todo-section:not(:contains(' + filterWord + '))');
+	    let toDoIWant = $('.todo-section:contains(' + filterWord + ')');
+	    toDoIDontWant.hide();
+	    toDoIWant.show();
+	  }
 	};
 
-	module.exports = ideaBox;
+	module.exports = toDoBox;
+
+	const ToDo = __webpack_require__(4);
 
 /***/ }
 /******/ ]);
