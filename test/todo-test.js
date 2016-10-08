@@ -23,9 +23,9 @@ describe('Todo', function(){
       assert.equal(todo.title, 'laundry')
     });
 
-    it('has a quality', function(){
+    it('has a importance', function(){
       todo = new ToDo('laundry', 'kids')
-      assert.equal(todo.quality, 'swill')
+      assert.equal(todo.importance, 'normal')
     });
 
     it('has an id', function(){
@@ -55,10 +55,10 @@ describe('Todo', function(){
     });
   });
 
-  context('updateQuality method', function(){
+  context('updateImportance method', function(){
     it('is a method', function(){
       todo = new ToDo('laundry', 'kids')
-      assert.isFunction(todo.updateQuality)
+      assert.isFunction(todo.updateImportance)
     });
   });
 });

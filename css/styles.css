@@ -115,15 +115,15 @@ header input {
 }
 
 .complete-task {
+  background: url('../images/svg-images/circular-check-button-grey.svg') no-repeat;
   float: right;
-  display: inline-block;
-  margin: 0;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
 }
 
-.remove-todo, .upvote, .downvote {
+.complete-task:hover {
+  background: url('../images/svg-images/circular-check-button-hover.svg')
+}
+
+.remove-todo, .upvote, .downvote, .complete-task {
   height: 20px;
   width: 20px;
   display: inline-block;
@@ -155,7 +155,7 @@ header input {
   background: url('../images/svg-images/downvote-hover.svg')
 }
 
-.quality-control {
+.importance-control {
   font-family: 'Roboto Slab', serif;
   color: #6D6E71;
   font-size: 12px;
@@ -226,12 +226,12 @@ header input {
     width: 22px;
   }
 
-  .quality-control {
+  .importance-control {
     font-size: 14px;
     padding-top: 4px;
   }
 
-  .quality-choice {
+  .importance-choice {
     font-family: 'Open Sans', sans-serif;
   }
 }
