@@ -1,3 +1,4 @@
+
 header {
   background-color: #E5F3F2;
 }
@@ -74,6 +75,11 @@ header input {
   margin-bottom: 20px;
 }
 
+.show-completed-todos {
+  display: block;
+  margin: 20px auto;
+}
+
 /*________________________________*/
 
 .todo-list section {
@@ -105,7 +111,7 @@ header input {
   background: url('../images/svg-images/delete-hover.svg')
 }
 
-.body-input {
+.todo-body {
   font-family: 'Open Sans', sans-serif;
   color: #939598;
   font-size: 14px;
@@ -114,22 +120,30 @@ header input {
   line-height: 1.5;
 }
 
-.complete-task {
+.complete .todo-title, .complete .todo-body, .complete .complete-task-button, .complete .importance-control {
+  color: #d2d2d2;
+  text-decoration: line-through;
+}
+
+.complete-task-button {
   background: url('../images/svg-images/circular-check-button-grey.svg') no-repeat;
   float: right;
+  border: none;
 }
 
-.complete-task:hover {
+.complete-task-button:hover {
   background: url('../images/svg-images/circular-check-button-hover.svg')
+  /*border: none;*/
 }
 
-.remove-todo, .upvote, .downvote, .complete-task {
+.remove-todo, .upvote, .downvote, .complete-task-button {
   height: 20px;
   width: 20px;
   display: inline-block;
   vertical-align: bottom;
   border: none;
   cursor: pointer;
+  outline: none;
 }
 
 .vote {
@@ -217,7 +231,7 @@ header input {
     float: right;
   }
 
-  .body-input {
+  .todo-body {
     font-size: 16px;
   }
 
