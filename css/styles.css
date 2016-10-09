@@ -75,20 +75,24 @@ header input {
   margin-bottom: 20px;
 }
 
-.show-completed-todos {
+#show-completed-todos-button {
   display: block;
   margin: 20px auto;
 }
 
 /*________________________________*/
 
-.todo-list section {
+.todo-list section, .completed-todos section {
    margin: auto;
    list-style: none;
    width: 400px;
    padding: 20px 0;
    border-bottom: 2px solid #D1D3D4;
  }
+
+.completed-todos section {
+  border: dotted red 2px;
+}
 
 .todo-title {
   font-family: 'Roboto Slab', serif;
