@@ -133,7 +133,6 @@ header input {
 
 .complete-task-button:hover {
   background: url('../images/svg-images/circular-check-button-hover.svg')
-  /*border: none;*/
 }
 
 .remove-todo, .upvote, .downvote, .complete-task-button {
