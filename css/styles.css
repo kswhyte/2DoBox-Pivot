@@ -1,5 +1,5 @@
 header {
-  background-color: #ecfffe;
+  background-color: #cfe3e2;
 }
 
 header h1, span {
@@ -21,7 +21,7 @@ span {
 }
 
 .todo-text {
-  color: #00d2d4;
+  color: #007d7d;
   margin: bottom: 20px;
 }
 
@@ -32,7 +32,7 @@ header input {
 }
 
 .todo-form {
-  background-color: #ecfffe;
+  background-color: #cfe3e2;
   position: relative;
   height: 155px;
   display: -webkit-flex;
@@ -63,7 +63,7 @@ header input {
   border: none;
   width: 406px;
   text-align: center;
-  background-color: #00d2d4;
+  background-color: #007d7d;
   height: 30px;
   color: #FFFFFF;
   cursor: pointer;
@@ -90,7 +90,7 @@ header input {
   border: none;
   width: 406px;
   text-align: center;
-  background-color:#00d2d4;
+  background-color:#007d7d;
   height: 30px;
   color: #FFFFFF;
   cursor: pointer;
@@ -103,7 +103,7 @@ header input {
 }
 
 #show-all-todos-button {
-  background-color:#00d2d4;
+  background-color:#007d7d;
 }
 
 #show-completed-todos-button {
@@ -129,6 +129,7 @@ header input {
 }
 
 #none-filter, #low-filter, #normal-filter, #high-filter, #critical-filter {
+  background-color: #424242;
   margin: 5px;
   height: 30px;
   width: 70px;
@@ -209,7 +210,7 @@ header input {
 
 .todo-body {
   font-family: 'Open Sans', sans-serif;
-  color: #939598;
+  color: #6a6a6a;
   font-size: 14px;
   margin: 10px auto;
   word-wrap: break-word;
