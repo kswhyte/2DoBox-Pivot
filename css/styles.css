@@ -1,4 +1,3 @@
-
 header {
   background-color: #E5F3F2;
 }
@@ -66,18 +65,32 @@ header input {
   font-size: 14px;
 }
 
-#save-button:hover{
+#show-completed-todos-button, #show-all-todos-button {
+  border: none;
+  width: 203px;
+  text-align: center;
+  background-color:#00A79D;
+  height: 30px;
+  color: #FFFFFF;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+#filters {
+  position: relative;
+  display: -webkit-flex;
+  -webkit-justify-content: center;
+  justify-content: center;
+  margin-bottom: 25px;
+}
+
+#save-button:hover, #show-completed-todos-button:hover, #show-all-todos-button:hover{
   background-color:#045E55;
 }
 
 #search-bar {
   height: 20px;
   margin-bottom: 20px;
-}
-
-#show-completed-todos-button {
-  display: block;
-  margin: 20px auto;
 }
 
 /*________________________________*/
@@ -211,7 +224,13 @@ header input {
     height: 60px;
   }
 
-  #save-button{
+  #save-button {
+    width: 306px;
+    font-size: 16px;
+    top: 135px;
+  }
+
+  #show-completed-todos-button, #show-all-todos-button {
     width: 306px;
     font-size: 16px;
     top: 135px;

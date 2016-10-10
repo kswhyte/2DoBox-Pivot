@@ -5,6 +5,49 @@ var toDoBox = require('../../lib/todo-box')
 var controller = require('../../lib/controller')
 
 describe('Controller | Unit Tests', function(){
+//<<<<<<< HEAD
+  context('updateModelFromLS', function(){
+    it('is a method', function(){
+      assert.isFunction(controller.updateModelFromLS)
+    })
+  })
+  context('updateLSFromModel', function(){
+    it('is a method', function(){
+      assert.isFunction(controller.updateLSFromModel)
+    })
+  })
+  context('setToDoListToLS', function(){
+    it('is a method', function(){
+      assert.isFunction(controller.setToDoListToLS)
+    })
+  })
+  context('setCompletedToDoListToLS', function(){
+    it('is a method', function(){
+      assert.isFunction(controller.setCompletedToDoListToLS)
+    })
+  })
+  context('updateModelFromLS', function(){
+    it('is a method', function(){
+      assert.isFunction(controller.updateModelFromLS)
+    })
+  })
+  context('renderActiveToDosToDOM', function(){
+    it('is a method', function(){
+      assert.isFunction(controller.renderActiveToDosToDOM)
+    })
+  })
+  context('renderCompletedToDosToDOM', function(){
+    it('is a method', function(){
+      assert.isFunction(controller.renderCompletedToDosToDOM)
+    })
+  })
+  context('clearFields', function(){
+    it('is a method', function(){
+      assert.isFunction(controller.clearFields)
+    })
+  })
+})
+// =======
   context('updateLSFromModel', function(){
 
     it('should have a method called updateLSFromModel', function(){
@@ -64,3 +107,4 @@ describe('Controller | Unit Tests', function(){
 
   });
 });
+// >>>>>>> master
