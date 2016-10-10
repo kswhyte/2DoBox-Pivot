@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <link rel="stylesheet" type="text/css" href="./css/reset.css">
+    <!-- <link rel="stylesheet" type="text/css" href="./css/reset.css"> -->
     <link rel="stylesheet" type="text/css" href="./css/styles.css">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans|Roboto+Slab:700" rel="stylesheet">
     <title>To-Do Box | by Ian Lancaster and Kinan Whyte</title>
@@ -11,12 +11,11 @@
   <header>
     <h1 class="todobox-page-title"><span class="todo-text">to-do</span><span class="box-text">box</span></h1>
 
-    <p id="title-input-count">0</p>
-    <p id="body-input-count">0</p>
-
     <form class="todo-form">
       <label for="title"><input type="text" id="title-input" placeholder="Title" aria-labelledby="title-input"></label>
+      <p id="title-input-count">0</p>
       <label for="body"><input type="text" id="body-input" placeholder="Body" aria-labelledby="body-input"></label>
+      <p id="body-input-count">0</p>
       <button type="button" id="save-button">save</button>
     </form>
   </header>
@@ -41,10 +40,9 @@
         <button type="button" id="critical-filter">critical</button>
       </section>
     </nav>
-    <section class="todo-list">
-    </section>
-
     <section class="completed-todos">
+    </section>
+    <section class="todo-list">
     </section>
   </body>
   <script src="main.bundle.js"></script>

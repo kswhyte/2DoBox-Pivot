@@ -1,65 +1,82 @@
 header {
-  background-color: #cfe3e2;
-}
+  background-color: #cfe3e2; }
+
+p {
+  font-family: 'Open Sans', sans-serif;
+  color: #424242; }
 
 header h1, span {
   margin: auto;
   font-family: 'Roboto Slab', serif;
   font-weight: 700;
   font-size: 40px;
-  text-align: center;
-}
+  text-align: center; }
 
 .todobox-page-title {
-  margin: auto;
-}
+  margin: auto; }
 
-span {
+header h1 span {
   margin: 30px 0;
   display: inline-block;
-  color: #424242;
-}
+  color: #424242; }
 
 .todo-text {
   color: #007d7d;
-  margin: bottom: 20px;
-}
-
-header input {
-  height: 20px;
-  width: 400px;
-  position: absolute;
-}
+  margin-bottom: 20px; }
 
 .todo-form {
   background-color: #cfe3e2;
-  position: relative;
-  height: 155px;
-  display: -webkit-flex;
-  -webkit-justify-content: center;
-  justify-content: center;
-  margin-bottom: 25px;
-}
+  padding-bottom: 25px;
+  margin-bottom: 25px; }
 
 ::-webkit-input-placeholder {
-  font-size: 14px;
-}
+  font-size: 14px; }
 
-#title-input, #body-input, #search-bar {
-  width: 400px;
+#body-input, #title-input {
   display: block;
   margin: auto;
-}
-
-#body-input {
-  top: 45px;
   width: 400px;
-  height: 20px;
-}
+  height: 20px; }
+
+#body-input-count, #title-input-count {
+  display: block;
+  margin: auto;
+  width: 400px;
+  padding-top: 10px;
+  padding-bottom: 10px; }
 
 #save-button {
   position: relative;
-  top: 95px;
+  display: block;
+  margin: auto;
+  border: none;
+  width: 406px;
+  text-align: center;
+  background-color: #007d7d;
+  height: 30px;
+  color: #FFFFFF;
+  cursor: pointer;
+  font-size: 14px; }
+
+#search-bar {
+  width: 400px;
+  display: block;
+  margin: auto; }
+
+#search-bar {
+  height: 20px;
+  margin-bottom: 20px; }
+
+/*____________________*/
+/*filtering buttons*/
+#filters {
+  position: relative;
+  display: -webkit-flex;
+  -webkit-justify-content: center;
+  justify-content: center;
+  margin-bottom: 20px; }
+
+#show-all-todos-button, #show-completed-todos-button {
   border: none;
   width: 406px;
   text-align: center;
@@ -68,47 +85,17 @@ header input {
   color: #FFFFFF;
   cursor: pointer;
   font-size: 14px;
-}
-
-#search-bar {
-  height: 20px;
-  margin-bottom: 20px;
-}
-
-/*____________________*/
-/*filtering buttons*/
-
-#filters{
   position: relative;
   display: -webkit-flex;
   -webkit-justify-content: center;
   justify-content: center;
-  margin-bottom: 20px;
-}
-
-#show-all-todos-button, #show-completed-todos-button {
-  border: none;
-  width: 406px;
-  text-align: center;
-  background-color:#007d7d;
-  height: 30px;
-  color: #FFFFFF;
-  cursor: pointer;
-  font-size: 14px;
-  position: relative;
-  display: -webkit-flex;
-  -webkit-justify-content: center;
-  justify-content: center;
-  margin-bottom: 20px;
-}
+  margin-bottom: 20px; }
 
 #show-all-todos-button {
-  background-color:#007d7d;
-}
+  background-color: #007d7d; }
 
 #show-completed-todos-button {
-  background-color: #424242;
-}
+  background-color: #424242; }
 
 #filter-by-importance-text {
   display: flex;
@@ -117,16 +104,14 @@ header input {
   font-family: 'Open Sans', sans-serif;
   color: #424242;
   font-size: 18px;
-  line-height: 1.25;
-}
+  line-height: 1.25; }
 
 #importance-controller {
   position: relative;
   display: -webkit-flex;
   -webkit-justify-content: center;
   justify-content: center;
-  margin-bottom: 20px;
-}
+  margin-bottom: 20px; }
 
 #none-filter, #low-filter, #normal-filter, #high-filter, #critical-filter {
   background-color: #424242;
@@ -137,55 +122,45 @@ header input {
   color: #FFFFFF;
   cursor: pointer;
   font-size: 14px;
-  text-align: center;
-}
+  text-align: center; }
 
 #none-filter:hover {
-  background-color: #1f1e1e;
-}
-#low-filter:hover {
-  background-color: #7bd000;
+  background-color: #1f1e1e; }
 
-}
+#low-filter:hover {
+  background-color: #7bd000; }
+
 #normal-filter:hover {
   background-color: #f7ee02;
-  color: #424242;
+  color: #424242; }
 
-}
 #high-filter:hover {
-  background-color: #f4a800;
-}
+  background-color: #f4a800; }
 
 #critical-filter:hover {
-  background-color: #e44a08;
-}
+  background-color: #e44a08; }
 
 #save-button:hover, #show-all-todos-button:hover {
- background-color: #009394;
-}
+  background-color: #009394; }
 
 #show-completed-todos-button:hover {
-  background-color: #1f1e1e;
-}
+  background-color: #1f1e1e; }
+
 /*________________________________*/
 /*todo list section*/
-
 .todo-list section {
-  margin: auto;
-}
+  margin: auto; }
 
 .todo-list section, .completed-todos section {
-   list-style: none;
-   width: 400px;
-   padding: 20px 0;
-   border-bottom: 2px solid #D1D3D4;
- }
+  list-style: none;
+  width: 400px;
+  padding: 20px 0;
+  border-bottom: 2px solid #D1D3D4; }
 
 .completed-todos section {
   margin: 20px auto;
   border: solid #D1D3D4 2px;
-  padding: 20px;
-}
+  padding: 20px; }
 
 .todo-title {
   font-family: 'Roboto Slab', serif;
@@ -194,19 +169,16 @@ header input {
   line-height: 1.25;
   display: inline-block;
   max-width: 250px;
-  word-wrap: break-word;
-}
+  word-wrap: break-word; }
 
 .remove-todo {
-  background: url('../images/svg-images/delete.svg') no-repeat;
+  background: url("../images/svg-images/delete.svg") no-repeat;
   display: inline-block;
   margin: 0;
-  float: right;
-}
+  float: right; }
 
 .remove-todo:hover {
-  background: url('../images/svg-images/delete-hover.svg')
-}
+  background: url("../images/svg-images/delete-hover.svg"); }
 
 .todo-body {
   font-family: 'Open Sans', sans-serif;
@@ -214,23 +186,19 @@ header input {
   font-size: 14px;
   margin: 10px auto;
   word-wrap: break-word;
-  line-height: 1.5;
-}
+  line-height: 1.5; }
 
 .complete .todo-title, .complete .todo-body, .complete .complete-task-button, .complete .importance-control {
   color: #d2d2d2;
-  text-decoration: line-through;
-}
+  text-decoration: line-through; }
 
 .complete-task-button {
-  background: url('../images/svg-images/circular-check-button-grey.svg') no-repeat;
+  background: url("../images/svg-images/circular-check-button-grey.svg") no-repeat;
   float: right;
-  border: none;
-}
+  border: none; }
 
 .complete-task-button:hover {
-  background: url('../images/svg-images/circular-check-button-hover.svg')
-}
+  background: url("../images/svg-images/circular-check-button-hover.svg"); }
 
 .remove-todo, .upvote, .downvote, .complete-task-button {
   height: 20px;
@@ -239,88 +207,71 @@ header input {
   vertical-align: bottom;
   border: none;
   cursor: pointer;
-  outline: none;
-}
+  outline: none; }
 
 .vote {
   width: auto;
-  display: inline-flex;
-}
+  display: inline-flex; }
 
 .upvote {
-  background: url('../images/svg-images/upvote.svg') no-repeat;
-  margin-right: 12px;
-}
+  background: url("../images/svg-images/upvote.svg") no-repeat;
+  margin-right: 12px; }
 
 .upvote:hover {
-  background: url('../images/svg-images/upvote-hover.svg')
-}
+  background: url("../images/svg-images/upvote-hover.svg"); }
 
 .downvote {
-  background: url('../images/svg-images/downvote.svg') no-repeat;
-  margin-right: 12px;
-}
+  background: url("../images/svg-images/downvote.svg") no-repeat;
+  margin-right: 12px; }
 
 .downvote:hover {
-  background: url('../images/svg-images/downvote-hover.svg')
-}
+  background: url("../images/svg-images/downvote-hover.svg"); }
 
 .importance-control {
   font-family: 'Roboto Slab', serif;
   color: #424242;
   font-size: 12px;
-  padding-top: 2px;
-}
+  padding-top: 2px; }
 
 @media (max-width: 440px) {
   header input {
-    width: 300px;
-  }
+    width: 300px; }
 
   .todo-form {
-    height: 195px;
-  }
+    height: 195px; }
 
-/*can we move the placeholder text: "body" up to the left top corner*/
+  /*can we move the placeholder text: "body" up to the left top corner*/
   ::-webkit-input-placeholder {
     font-size: 16px;
-    padding: 0;
-  }
+    padding: 0; }
 
   #title-input, #body-input, #search-bar {
     width: 300px;
     display: block;
-    margin: auto;
-  }
+    margin: auto; }
 
   #body-input {
-    height: 60px;
-  }
+    height: 60px; }
 
   #save-button, #show-completed-todos-button, #show-all-todos-button {
     max-width: 306px;
     font-size: 16px;
-    top: 135px;
-  }
+    top: 135px; }
 
   #filter-by-importance-text {
     margin: auto;
-    font-size: 20px;
-    }
+    font-size: 20px; }
 
   #filters {
-    margin-top: 0;
-  }
+    margin-top: 0; }
 
   #show-todos {
     padding-bottom: 120px;
-    padding-top: 0;
-  }
+    padding-top: 0; }
 
   #importance-controller {
     position: center;
-    padding: 20px 70px 0 70px;
-  }
+    padding: 20px 70px 0 70px; }
 
   #none-filter, #low-filter, #normal-filter, #high-filter, #critical-filter {
     margin: 5px;
@@ -331,8 +282,7 @@ header input {
     color: #FFFFFF;
     cursor: pointer;
     font-size: 14px;
-    text-align: center;
-  }
+    text-align: center; }
 
   /*.importance-control {
     font-size: 14px;
@@ -342,35 +292,29 @@ header input {
   .importance-choice {
     font-family: 'Open Sans', sans-serif;
   }*/
-
   /*#importance-controller {
     align-items: center;
     margin: auto;
   }*/
-
   /*________________________*/
   .todo-list section {
-    width: 300px;
-  }
+    width: 300px; }
 
   .todo-title {
     font-size: 20px;
-    max-width: 150px;
-  }
+    max-width: 150px; }
 
   .remove-todo {
-    background: url('../images/svg-images/delete.svg') no-repeat;
+    background: url("../images/svg-images/delete.svg") no-repeat;
     display: inline-block;
     margin: 0px 10px;
-    float: right;
-  }
+    float: right; }
 
   .todo-body {
-    font-size: 16px;
-  }
+    font-size: 16px; }
 
   .remove-todo, .upvote, .downvote {
     height: 22px;
-    width: 22px;
-  }
-}
+    width: 22px; } }
+
+/*# sourceMappingURL=styles.css.map */
