@@ -1,5 +1,7 @@
+// $topBackgroundColor = #E5F3F2;
+
 header {
-  background-color: #cfe3e2;
+  background-color: #ecfffe;
 }
 
 header h1, span {
@@ -21,7 +23,7 @@ span {
 }
 
 .todo-text {
-  color: #007d7d;
+  color: #00d2d4;
   margin: bottom: 20px;
 }
 
@@ -32,7 +34,7 @@ header input {
 }
 
 .todo-form {
-  background-color: #cfe3e2;
+  background-color: #ecfffe;
   position: relative;
   height: 155px;
   display: -webkit-flex;
@@ -63,7 +65,7 @@ header input {
   border: none;
   width: 406px;
   text-align: center;
-  background-color: #007d7d;
+  background-color: #00d2d4;
   height: 30px;
   color: #FFFFFF;
   cursor: pointer;
@@ -90,7 +92,7 @@ header input {
   border: none;
   width: 406px;
   text-align: center;
-  background-color:#007d7d;
+  background-color:#00d2d4;
   height: 30px;
   color: #FFFFFF;
   cursor: pointer;
@@ -103,7 +105,7 @@ header input {
 }
 
 #show-all-todos-button {
-  background-color:#007d7d;
+  background-color:#00d2d4;
 }
 
 #show-completed-todos-button {
@@ -129,7 +131,6 @@ header input {
 }
 
 #none-filter, #low-filter, #normal-filter, #high-filter, #critical-filter {
-  background-color: #424242;
   margin: 5px;
   height: 30px;
   width: 70px;
@@ -210,7 +211,7 @@ header input {
 
 .todo-body {
   font-family: 'Open Sans', sans-serif;
-  color: #6a6a6a;
+  color: #939598;
   font-size: 14px;
   margin: 10px auto;
   word-wrap: break-word;
