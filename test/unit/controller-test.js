@@ -6,42 +6,42 @@ var controller = require('../../lib/controller')
 
 describe('Controller | Unit Tests', function(){
   context('updateModelFromLS', function(){
-    it('should be a method', function(){
+    it('is a method', function(){
       assert.isFunction(controller.updateModelFromLS)
     })
-  })  
+  })
   context('updateLSFromModel', function(){
-    it('should be a method', function(){
+    it('is a method', function(){
       assert.isFunction(controller.updateLSFromModel)
     })
   })
   context('setToDoListToLS', function(){
-    it('should be a method', function(){
+    it('is a method', function(){
       assert.isFunction(controller.setToDoListToLS)
     })
   })
   context('setCompletedToDoListToLS', function(){
-    it('should be a method', function(){
+    it('is a method', function(){
       assert.isFunction(controller.setCompletedToDoListToLS)
     })
   })
   context('updateModelFromLS', function(){
-    it('should be a method', function(){
+    it('is a method', function(){
       assert.isFunction(controller.updateModelFromLS)
     })
   })
   context('renderActiveToDosToDOM', function(){
-    it('should be a method', function(){
+    it('is a method', function(){
       assert.isFunction(controller.renderActiveToDosToDOM)
     })
   })
   context('renderCompletedToDosToDOM', function(){
-    it('should be a method', function(){
+    it('is a method', function(){
       assert.isFunction(controller.renderCompletedToDosToDOM)
     })
   })
   context('clearFields', function(){
-    it('should be a method', function(){
+    it('is a method', function(){
       assert.isFunction(controller.clearFields)
     })
   })
