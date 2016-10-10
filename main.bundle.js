@@ -79,62 +79,65 @@
 	  }
 	});
 
-	$('.todo-list').on('focusout', '.todo-title', function (e) {
+	$('body').on('focusout', '.todo-title', function (e) {
 	  let toDoId = parseInt(e.target.parentElement.id);
 	  let newTitle = $(this).text();
 	  ToDo.prototype.toDoTitleFocusOut(toDoId, newTitle);
 	  controller.toDoTitleFocusOut();
 	});
 
-	$('.todo-list').on('keypress', '.todo-title', function (e) {
+	$('body').on('keypress', '.todo-title', function (e) {
 	  if (event.which == 13) {
 	    event.preventDefault();
 	    $(this).blur();
 	  }
 	});
 
-	$('.todo-list').on('focusout', '.body-input', function (e) {
+	$('body').on('focusout', '.todo-body', function (e) {
 	  let toDoId = parseInt(e.target.parentElement.id);
 	  let newBody = $(this).text();
 	  ToDo.prototype.toDoBodyFocusOut(toDoId, newBody);
 	  controller.toDoBodyFocusOut();
 	});
 
-	$('.todo-list').on('keypress', '.body-input', function (e) {
+	$('body').on('keypress', '.todo-body', function (e) {
 	  if (event.which == 13) {
 	    event.preventDefault();
 	    $(this).blur();
 	  }
 	});
 
-	$('.todo-list').on('click', '.remove-todo', function (e) {
+	$('body').on('click', '.remove-todo', function (e) {
 	  let toDoId = parseInt(e.target.parentElement.id);
 	  toDoBox.removeToDoButtonClick(toDoId);
 	  controller.removeToDoButtonClick();
 	});
 
-	// ----------
-	$('.todo-list').on('click', 'complete-task', function (e) {
+	$('body').on('click', '.complete-task-button', function (e) {
 	  let toDoId = parseInt(e.target.parentElement.id);
-	  toDoBox.completeTaskButtonClick(toDoId);
+	  ToDo.prototype.completeTaskButtonClick(toDoId);
 	  controller.completeTaskButtonClick();
 	});
 
-	$('.todo-list').on('click', '.upvote', function (e) {
+	$('body').on('click', '.upvote', function (e) {
 	  let toDoId = parseInt(e.target.parentElement.parentElement.id);
 	  ToDo.prototype.upvoteToDoButtonClick(toDoId);
 	  controller.upvoteToDoButtonClick();
 	});
 
-	$('.todo-list').on('click', '.downvote', function (e) {
+	$('body').on('click', '.downvote', function (e) {
 	  let toDoId = parseInt(e.target.parentElement.parentElement.id);
 	  ToDo.prototype.downvoteToDoButtonClick(toDoId);
 	  controller.downvoteToDoButtonClick();
 	});
 
-	$("#search-bar").keyup(function () {
+	$('#search-bar').keyup(function () {
 	  let filterWord = $(this).val();
 	  toDoBox.searchFilterKeyup(filterWord);
+	});
+
+	$('#show-completed-todos-button').on('click', function () {
+	  controller.showCompletedToDosButtonClick();
 	});
 
 	module.exports = dom;
@@ -1800,33 +1803,38 @@
 	const $ = __webpack_require__(2);
 
 	const controller = {
+	  renderCompletedToDos: false,
 	  documentReady: function () {
 	    this.updateModelFromLS();
-	    this.renderModelToDom();
+	    this.renderModelToDOM();
 	  },
 	  saveButtonClick: function () {
 	    this.updateLSFromModel();
-	    this.renderModelToDom();
+	    this.renderModelToDOM();
 	    this.clearFields();
 	  },
 	  toDoSearchInputKeyup: function () {
-	    this.renderModelToDom();
+	    this.renderModelToDOM();
 	  },
 	  removeToDoButtonClick: function () {
-	    this.renderModelToDom();
+	    this.renderModelToDOM();
 	    this.updateLSFromModel();
 	  },
-	  // -------
 	  completeTaskButtonClick: function () {
-	    this.renderModelToDom();
+	    this.renderModelToDOM();
+	    this.updateLSFromModel();
+	  },
+	  showCompletedToDosButtonClick: function () {
+	    this.renderCompletedToDos = !this.renderCompletedToDos;
+	    this.renderModelToDOM();
 	    this.updateLSFromModel();
 	  },
 	  upvoteToDoButtonClick: function () {
-	    this.renderModelToDom();
+	    this.renderModelToDOM();
 	    this.updateLSFromModel();
 	  },
 	  downvoteToDoButtonClick: function () {
-	    this.renderModelToDom();
+	    this.renderModelToDOM();
 	    this.updateLSFromModel();
 	  },
 	  toDoTitleFocusOut: function () {
@@ -1836,25 +1844,73 @@
 	    this.updateLSFromModel();
 	  },
 	  searchFilterKeyup: function () {
-	    this.renderModelToDom();
+	    this.renderModelToDOM();
 	  },
 	  updateLSFromModel: function () {
-	    localStorage.setItem("toDoList", JSON.stringify(toDoBox.toDoList));
+	    let newToDos = [];
+	    let newCompletedToDos = [];
+	    let oldToDoList = toDoBox.activeToDoList;
+	    let oldCompletedToDoList = toDoBox.completedToDoList;
+	    this.setToDoListToLS(newToDos, oldToDoList, oldCompletedToDoList);
+	    this.setCompletedToDoListToLS(newCompletedToDos, oldToDoList, oldCompletedToDoList);
+	  },
+	  setToDoListToLS: function (newToDos, oldToDoList, oldCompletedToDoList) {
+	    newToDos = oldCompletedToDoList.filter(function (currentToDo) {
+	      return currentToDo.complete === false;
+	    });
+	    let oldToDos = oldToDoList.filter(function (currentToDo) {
+	      return currentToDo.complete === false;
+	    });
+
+	    let activeToDoList = oldToDos.concat(newToDos);
+	    localStorage.setItem("activeToDoList", JSON.stringify(activeToDoList));
+	  },
+	  setCompletedToDoListToLS: function (newCompletedToDos, oldToDoList, oldCompletedToDoList) {
+	    newCompletedToDos = oldToDoList.filter(function (currentToDo) {
+	      return currentToDo.complete === true;
+	    });
+	    let oldCompletedToDos = oldCompletedToDoList.filter(function (currentToDo) {
+	      return currentToDo.complete === true;
+	    });
+
+	    let completedToDoList = oldCompletedToDos.concat(newCompletedToDos);
+	    localStorage.setItem("completedToDoList", JSON.stringify(completedToDoList));
 	  },
 	  updateModelFromLS: function () {
-	    retrievedToDoList = JSON.parse(localStorage.getItem('toDoList'));
-	    if (retrievedToDoList) {
-	      toDoBox.toDoList = retrievedToDoList.map(function (toDo) {
-	        return new ToDo(toDo.title, toDo.body, toDo.importance, toDo.id);
+	    retrievedActiveToDoList = JSON.parse(localStorage.getItem('activeToDoList'));
+	    if (retrievedActiveToDoList) {
+	      toDoBox.activeToDoList = retrievedActiveToDoList.map(function (toDo) {
+	        return new ToDo(toDo.title, toDo.body, toDo.importance, toDo.id, toDo.complete);
+	      });
+	    }
+	    retrievedCompletedToDoList = JSON.parse(localStorage.getItem('completedToDoList'));
+	    if (retrievedCompletedToDoList) {
+	      toDoBox.completedToDoList = retrievedCompletedToDoList.map(function (toDo) {
+	        return new ToDo(toDo.title, toDo.body, toDo.importance, toDo.id, toDo.complete);
 	      });
 	    }
 	  },
-	  renderModelToDom: function () {
+	  renderModelToDOM: function () {
+	    this.renderActiveToDosToDOM();
+	    this.renderCompletedToDosToDOM();
+	  },
+	  renderActiveToDosToDOM: function () {
 	    $('.todo-list').html('');
-	    toDoBox.toDoList.forEach(function (toDo) {
+	    toDoBox.activeToDoList.forEach(function (toDo) {
 	      $('.todo-list').prepend(toDo.renderToDoToHTML());
 	    });
 	    toDoBox.filterToDos($('#search-bar').val());
+	    $('.todo-section[complete|="true"]').addClass('complete');
+	  },
+	  renderCompletedToDosToDOM: function () {
+	    if (this.renderCompletedToDos === true) {
+	      $('.completed-todos').html('');
+	      toDoBox.completedToDoList.forEach(function (toDo) {
+	        $('.completed-todos').prepend(toDo.renderToDoToHTML());
+	      });
+	    } else {
+	      $('.completed-todos').html('');
+	    }
 	  },
 	  clearFields: function () {
 	    $('#title-input').val('');
@@ -1874,11 +1930,19 @@
 /* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
-	function ToDo(title, body, importance = 'normal', id = Date.now()) {
+	function ToDo(title, body, importance = 'normal', id = Date.now(), complete = false) {
 	  this.id = id;
 	  this.title = title;
 	  this.body = body;
 	  this.importance = importance;
+	  this.complete = complete;
+	  this.completeClass = function () {
+	    if (this.complete === true) {
+	      return 'complete';
+	    } else {
+	      return '';
+	    }
+	  };
 	}
 	ToDo.prototype = {
 	  upvoteToDoButtonClick: function (toDoId) {
@@ -1886,6 +1950,11 @@
 	  },
 	  downvoteToDoButtonClick: function (toDoId) {
 	    this.updateImportance(toDoId, 'downvote');
+	  },
+	  // ------
+	  completeTaskButtonClick: function (toDoId) {
+	    this.completeToDo(toDoId);
+	    // this.markToDoComplete
 	  },
 	  toDoTitleFocusOut(toDoId, newTitle) {
 	    this.updateTitle(toDoId, newTitle);
@@ -1895,11 +1964,11 @@
 	  },
 	  renderToDoToHTML: function (toDo) {
 	    return `
-	      <section class="todo-section" id=${ this.id }>
+	      <section class="todo-section ${ this.completeClass() }" id="${ this.id }" complete="${ this.complete }">
 	        <h3 contenteditable="true" class="todo-title">${ this.title }</h3>
 	        <button class="remove-todo"></button>
-	        <p contenteditable="true" class="body-input"> ${ this.body }</p>
-	        <button class="complete-task"></button>
+	        <h3 contenteditable="true" class="todo-body"> ${ this.body }</h3>
+	        <button class="complete-task-button"></button>
 	        <div class="vote">
 	          <button class="upvote"></button>
 	          <article class="downvote"></article>
@@ -1925,6 +1994,10 @@
 	      index++;
 	      toDo.importance = importanceList[index];
 	    }
+	  },
+	  completeToDo: function (toDoId) {
+	    let toDo = toDoBox.findToDo(toDoId);
+	    toDo.complete = !toDo.complete;
 	  }
 	};
 
@@ -1939,40 +2012,38 @@
 	const $ = __webpack_require__(2);
 
 	const toDoBox = {
-	  toDoList: [],
+	  activeToDoList: [],
+	  completedToDoList: [],
 	  saveButtonClick: function (titleText, bodyText) {
 	    this.addToDo(titleText, bodyText);
 	  },
 	  removeToDoButtonClick: function (toDoId) {
 	    this.removeToDo(toDoId);
 	  },
-	  // ------
-	  completeTaskButtonClick: function (toDoId) {
-	    this.completeToDo(toDoId);
-	  },
 	  searchFilterKeyup: function (filterWord) {
 	    this.filterToDos(filterWord);
 	  },
 	  addToDo: function (titleText, bodyText) {
 	    let toDo = new ToDo(titleText, bodyText);
-	    this.toDoList.push(toDo);
+	    this.activeToDoList.push(toDo);
 	  },
 	  removeToDo: function (toDoId) {
-	    this.toDoList = this.toDoList.filter(function (currentToDo) {
+	    this.activeToDoList = this.activeToDoList.filter(function (currentToDo) {
+	      return currentToDo.id != toDoId;
+	    });
+	    this.completedToDoList = this.completedToDoList.filter(function (currentToDo) {
 	      return currentToDo.id != toDoId;
 	    });
 	  },
-	  // -------
-	  completeToDo: function (toDoId) {
-	    this.toDoList = this.toDoList.filter(function (currentToDo) {
-	      return currentToDo.id === toDoId;
-	    });
-	  },
 	  findToDo: function (toDoId) {
-	    let toDos = this.toDoList.filter(function (currentToDo) {
+	    let activeToDos = this.activeToDoList.filter(function (currentToDo) {
 	      return currentToDo.id === toDoId;
 	    });
-	    return toDos[0];
+	    let completedToDos = this.completedToDoList.filter(function (currentToDo) {
+	      return currentToDo.id === toDoId;
+	    });
+	    foundToDo = activeToDos.concat(completedToDos);
+	    return foundToDo[0];
 	  },
 	  filterToDos: function (filterWord) {
 	    let toDoIDontWant = $('.todo-section:not(:contains(' + filterWord + '))');
