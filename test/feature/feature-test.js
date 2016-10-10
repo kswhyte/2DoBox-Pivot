@@ -47,7 +47,7 @@ describe('Landing ToDo Box Page', function(){
   })
 })
 
-describe('Added ToDos', function(){
+describe('ToDo Box', function(){
   browser.url('/')
   it('should not have a default class of "complete"', function() {
     let completeClass = browser.element('.complete')
@@ -76,13 +76,20 @@ describe('Added ToDos', function(){
     assert.equal(removeButton.isEnabled(), true)
   })
   it('should remove a ToDo from the page', function() {
-    let toDo = browser.element('.todo-section')
+    let toDoTitle = browser.element("#title-input")
+    toDoTitle.setValue('Kittens and Puppies')
 
-    assert.equal(toDo.isExisting(), true)
+    let toDoBody = browser.element("#body-input")
+    toDoBody.setValue('get a bunch of them')
+
+    browser.click('#save-button')
+    var allIdeas = browser.elements('section').getText()
+    
+    assert.equal(allIdeas.length, 5)
     browser.click('.remove-todo')
-    // assert.equal(toDo.isExisting(), false)
+    assert.equal(allIdeas.length, 5)
     // why is this not working
-  })
+    })
   it('should have an default importance level of a todo set to "normal"', function() {
     let toDoTitle = browser.element("#title-input")
     toDoTitle.setValue('Kittens and Puppies')
@@ -115,7 +122,6 @@ describe('Added ToDos', function(){
     // why is this not working
   })
 })
-
 describe('Search Bar', function(){
   browser.url('/')
 
