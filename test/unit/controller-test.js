@@ -5,7 +5,6 @@ var toDoBox = require('../../lib/todo-box')
 var controller = require('../../lib/controller')
 
 describe('Controller | Unit Tests', function(){
-//<<<<<<< HEAD
   context('updateModelFromLS', function(){
     it('is a method', function(){
       assert.isFunction(controller.updateModelFromLS)
@@ -46,8 +45,6 @@ describe('Controller | Unit Tests', function(){
       assert.isFunction(controller.clearFields)
     })
   })
-})
-// =======
   context('updateLSFromModel', function(){
 
     it('should have a method called updateLSFromModel', function(){
@@ -107,4 +104,3 @@ describe('Controller | Unit Tests', function(){
 
   });
 });
-// >>>>>>> master

@@ -1,3 +1,5 @@
+
+
 header {
   background-color: #E5F3F2;
 }
@@ -52,7 +54,7 @@ header input {
   height: 20px;
 }
 
-#save-button{
+#save-button {
   position: relative;
   top: 95px;
   border: none;
@@ -65,7 +67,7 @@ header input {
   font-size: 14px;
 }
 
-#show-completed-todos-button, #show-all-todos-button {
+ #show-all-todos-button, #show-completed-todos-button {
   border: none;
   width: 203px;
   text-align: center;
@@ -76,12 +78,20 @@ header input {
   font-size: 14px;
 }
 
+#show-all-todos-button {
+  background-color:#00A79D;
+}
+
+#show-completed-todos-button {
+  background-color: #6D6E71;
+}
+
 #filters {
   position: relative;
   display: -webkit-flex;
-  -webkit-justify-content: center;
+  /*-webkit-justify-content: center;*/
   justify-content: center;
-  margin-bottom: 25px;
+  margin-bottom: 20px;
 }
 
 #save-button:hover, #show-completed-todos-button:hover, #show-all-todos-button:hover{
@@ -108,11 +118,12 @@ header input {
 }
 
 .todo-title {
+  margin: auto;
   font-family: 'Roboto Slab', serif;
   color: #6D6E71;
   font-size: 18px;
   line-height: 1.25;
-  display: inline-block;
+  display: block;
   max-width: 250px;
   word-wrap: break-word;
 }
