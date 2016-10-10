@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8">
     <link rel="stylesheet" type="text/css" href="./css/reset.css">
@@ -9,29 +9,31 @@
   </head>
 
   <header>
-    <h1 class="todo-title"><span class = "todo-text">to-do</span><span class = "box-text">box</span></h1>
+    <h1 class="todobox-page-title"><span class="todo-text">to-do</span><span class="box-text">box</span></h1>
 
     <p id="title-input-count">0</p>
     <p id="body-input-count">0</p>
 
     <form class="todo-form">
-      <input type="text" id="title-input" placeholder="Title">
-      <input type="text" id="body-input" placeholder="Body">
+      <label for="title"><input type="text" id="title-input" placeholder="Title" aria-labelledby="title-input"></label>
+      <label for="body"><input type="text" id="body-input" placeholder="Body" aria-labelledby="body-input"></label>
       <button type="button" id="save-button">save</button>
     </form>
   </header>
 
   <body>
     <section class = "search">
-      <input id="search-bar" type="text"  placeholder="Search">
+      <label for="search"><input id="search-bar" type="text"  placeholder="Search" aria-labelledby="search-bar"></label>
     </section>
     <nav id="filters">
       <section id="show-todos">
-        <button type="button" id="show-all-todos-button">Show All TODOs</button>
-        <button type="button" id="show-completed-todos-button">Show Completed TODOs</button>
+        <button type="button" id="show-all-todos-button">show all TODOs</button>
+        <button type="button" id="show-completed-todos-button">show completed TODOs</button>
       </section>
+    </nav>
+    <h2 id="filter-by-importance-text">filter by importance:</h2>
+    <nav id="importance-controller">
       <section id="filter-importance">
-        <h2>Filter by importance</h2>
         <button type="button" id="none-filter">none</button>
         <button type="button" id="low-filter">low</button>
         <button type="button" id="normal-filter">normal</button>
@@ -39,10 +41,10 @@
         <button type="button" id="critical-filter">critical</button>
       </section>
     </nav>
-    <section class="completed-todos">
+    <section class="todo-list">
     </section>
 
-    <section class="todo-list">
+    <section class="completed-todos">
     </section>
   </body>
   <script src="main.bundle.js"></script>
