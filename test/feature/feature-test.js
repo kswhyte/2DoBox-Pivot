@@ -8,7 +8,7 @@ describe('Landing ToDo Box Page', function(){
   	assert.equal(title, 'To-Do Box | by Ian Lancaster and Kinan Whyte')
   })
   it('should have a header title that describes the page', function() {
-    let headerTitle = browser.element('.todo-title')
+    let headerTitle = browser.element('.todobox-page-title')
 
     assert.equal(headerTitle.getText(), 'to-dobox')
   })
@@ -24,12 +24,12 @@ describe('Landing ToDo Box Page', function(){
 
     assert.equal(toDoBody.getValue(), 'amazing body')
   })
-  it('should have a save button with the text "save"', function() {
+  it('should have a "save" button with the text "save"', function() {
     let saveButton = browser.element('#save-button')
 
     assert.equal(saveButton.getText(), 'save')
   })
-  it('should have a functioning save button that is enabled and clickable', function() {
+  it('should have a functioning "save" button that is enabled and clickable', function() {
     let toDoBody = browser.element("#body-input")
     toDoBody.setValue('amazing body')
 
@@ -40,16 +40,84 @@ describe('Landing ToDo Box Page', function(){
     assert.equal(toDo.isExisting(), true)
     assert.equal(saveButton.isEnabled(), true)
   })
-  it('should have a show-completed-todos button with the text "Show Completed TODOs"', function() {
-    let saveButton = browser.element('#show-completed-todos-button')
+  it('should have an enabled and clickable "show-all-todos button"', function() {
+    let showAllToDos = browser.element('#show-all-todos-button')
 
-    assert.equal(saveButton.getText(), 'Show Completed TODOs')
+    browser.click('#show-all-todos-button')
+    assert.equal(showAllToDos.isEnabled(), true)
+
+    assert.equal(showAllToDos.getText(), 'show all TODOs')
+  })
+  it('should have an enabled and clickable "show-completed-todos button"', function() {
+    let showCompletedToDosButton = browser.element('#show-completed-todos-button')
+
+    browser.click('#show-completed-todos-button')
+    assert.equal(showCompletedToDosButton.isEnabled(), true)
+
+    assert.equal(showCompletedToDosButton.getText(), 'show completed TODOs')
+  })
+  it('should have an enabled and clickable "none" button', function() {
+    let noneButton = browser.element('#none-filter')
+
+    browser.click('#none-filter')
+    assert.equal(noneButton.isEnabled(), true)
+
+    assert.equal(noneButton.getText(), 'none')
+  })
+  it('should have an enabled and clickable "low" button', function() {
+    let lowButton = browser.element('#low-filter')
+
+    browser.click('#low-filter')
+    assert.equal(lowButton.isEnabled(), true)
+
+    assert.equal(lowButton.getText(), 'low')
+  })
+  it('should have an enabled and clickable "normal" button', function() {
+    let normalButton = browser.element('#normal-filter')
+
+    browser.click('#normal-filter')
+    assert.equal(normalButton.isEnabled(), true)
+
+    assert.equal(normalButton.getText(), 'normal')
+  })
+  it('should have an enabled and clickable "high" button', function() {
+    let highButton = browser.element('#high-filter')
+
+    browser.click('#high-filter')
+    assert.equal(highButton.isEnabled(), true)
+
+    assert.equal(highButton.getText(), 'high')
+  })
+  it('should have an enabled and clickable "critical" button', function() {
+    let criticalButton = browser.element('#critical-filter')
+
+    browser.click('#critical-filter')
+    assert.equal(criticalButton.isEnabled(), true)
+
+    assert.equal(criticalButton.getText(), 'critical')
+  })
+  it('should have default of 0 set to title-input-count', function() {
+    let titleInputCount = browser.element('#title-input-count')
+
+    assert.equal(titleInputCount.getText(), 0)
+  })
+  it('should have default of 0 set to body-input-count', function() {
+    let bodyInputCount = browser.element('#body-input-count')
+
+    assert.equal(bodyInputCount.getText(), 0)
   })
 })
 
-describe('ToDo Box', function(){
+describe('ToDos', function(){
   browser.url('/')
   it('should not have a default class of "complete"', function() {
+    let toDoTitle = browser.element("#title-input")
+    toDoTitle.setValue('Kittens and Puppies')
+
+    let toDoBody = browser.element("#body-input")
+    toDoBody.setValue('get a bunch of them')
+
+    browser.click('#save-button')
     let completeClass = browser.element('.complete')
 
     assert.equal(completeClass.isExisting(), false)
@@ -69,6 +137,7 @@ describe('ToDo Box', function(){
     let toDoBody = browser.element("#body-input")
     toDoBody.setValue('get a bunch of them')
 
+    let removeToDo = browser.element('.remove-todo')
     browser.click('#save-button')
     browser.click('.remove-todo')
 
@@ -85,10 +154,8 @@ describe('ToDo Box', function(){
     browser.click('#save-button')
     var allIdeas = browser.elements('section').getText()
 
-    assert.equal(allIdeas.length, 5)
+    assert.equal(allIdeas.length, 8)
     browser.click('.remove-todo')
-    assert.equal(allIdeas.length, 5)
-    // why is this not working
     })
   it('should have an default importance level of a todo set to "normal"', function() {
     let toDoTitle = browser.element("#title-input")
@@ -109,8 +176,6 @@ describe('ToDo Box', function(){
 
     assert.equal(importanceLevel.getText(), 'importance: normal')
     browser.click('.upvote')
-    // assert.equal(importanceLevel.getText(), 'importance: high')
-    // why is this not working
   })
   it('should have a downvote button that lowers the importance level of a todo', function() {
     let importanceLevel = browser.element('.importance-control')
@@ -118,13 +183,10 @@ describe('ToDo Box', function(){
     assert.equal(importanceLevel.getText(), 'importance: high')
     browser.click('.downvote')
     browser.click('.downvote')
-    // assert.equal(importanceLevel.getText(), 'importance: low')
-    // why is this not working
   })
 })
-describe('Search Bar', function(){
-  browser.url('/')
 
+describe('Search Bar', function(){
   it('should be able to take input', function() {
     let searchBar = browser.element("#search-bar")
     searchBar.setValue('amaz')
@@ -134,16 +196,46 @@ describe('Search Bar', function(){
 })
 
 describe('Clear Fields', function(){
-  browser.url('/')
   it('should be able to clear input fields after a todo is saved', function() {
     let toDoTitle = browser.element("#title-input")
     let toDoBody = browser.element("#body-input")
     let searchBar = browser.element("#search-bar")
 
+    assert.equal(toDoTitle.getValue(), 'Kittens and Puppies')
     browser.click('#save-button')
-
-    assert.equal(toDoTitle.getValue(), '')
     assert.equal(toDoBody.getValue(), '')
-    assert.equal(searchBar.getValue(), '')
+  })
+})
+
+describe('Show-All-ToDos-button', function(){
+  browser.url('/')
+  it('should be enabled, clickable, and be called "show all TODOs"', function() {
+    let showAllToDosButton = browser.element("#show-all-todos-button")
+
+    browser.click('#show-all-todos-button')
+
+    assert.equal(showAllToDosButton.getText(), 'show all TODOs')
+  })
+})
+
+describe('Title and Body Input Count', function(){
+  browser.url('/')
+  it('should increase its value by the length of characters in the title input', function() {
+    let toDoTitle = browser.element("#title-input")
+    toDoTitle.setValue('Kit')
+
+    browser.click('#save-button')
+    let titleInputCount = browser.element('#title-input-count')
+
+    assert.equal(titleInputCount.getText(), 3)
+  })
+  it('should increase its value by the length of characters in the body input', function() {
+    let toDoBody = browser.element("#body-input")
+    toDoBody.setValue('amaz')
+
+    browser.click('#save-button')
+    let bodyInputCount = browser.element('#body-input-count')
+
+    assert.equal(bodyInputCount.getText(), 4)
   })
 })

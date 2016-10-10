@@ -48,7 +48,7 @@
 	if(typeof window !== 'undefined' && window.initMochaPhantomJS) { window.initMochaPhantomJS(); }
 	mocha.setup({"ui":"bdd"});
 	__webpack_require__(14)
-	__webpack_require__(59);
+	__webpack_require__(58);
 	if(false) {
 		module.hot.accept();
 		module.hot.dispose(function() {
@@ -72,6 +72,7 @@
 	  $bodyInput: $('#body-input'),
 	  $toDoList: $('.todo-list'),
 	  $searchBar: $('#search-bar')
+
 	};
 
 	$(document).ready(function () {
@@ -83,11 +84,39 @@
 	  controller.saveButtonClick();
 	});
 
+	$('#body-input').keyup(function () {
+	  controller.bodyInputKeypress();
+	});
+
+	$('#title-input').keyup(function () {
+	  controller.titleInputKeypress();
+	});
+
 	$('#body-input').keypress(function (event) {
 	  if (event.which == 13) {
 	    toDoBox.saveButtonClick(dom.$titleInput.val(), dom.$bodyInput.val());
 	    controller.saveButtonClick();
 	  }
+	});
+
+	$('#none-filter').on('click', function () {
+	  controller.noneFilterClick();
+	});
+
+	$('#low-filter').on('click', function () {
+	  controller.lowFilterClick();
+	});
+
+	$('#normal-filter').on('click', function () {
+	  controller.normalFilterClick();
+	});
+
+	$('#high-filter').on('click', function () {
+	  controller.highFilterClick();
+	});
+
+	$('#critical-filter').on('click', function () {
+	  controller.criticalFilterClick();
 	});
 
 	$('body').on('focusout', '.todo-title', function (e) {
@@ -143,12 +172,15 @@
 	});
 
 	$('#search-bar').keyup(function () {
-	  let filterWord = $(this).val();
-	  toDoBox.searchFilterKeyup(filterWord);
+	  controller.searchFilterKeyup();
 	});
 
 	$('#show-completed-todos-button').on('click', function () {
 	  controller.showCompletedToDosButtonClick();
+	});
+
+	$('#show-all-todos-button').on('click', function () {
+	  controller.showAllToDosButtonClick();
 	});
 
 	module.exports = dom;
@@ -1815,8 +1847,22 @@
 
 	const controller = {
 	  renderCompletedToDos: false,
+	  showAllToDos: false,
+	  filteredImportance: {
+	    none: false,
+	    low: false,
+	    normal: false,
+	    high: false,
+	    critical: false
+	  },
 	  documentReady: function () {
 	    this.updateModelFromLS();
+	    this.renderModelToDOM();
+	  },
+	  titleInputKeypress: function () {
+	    this.renderModelToDOM();
+	  },
+	  bodyInputKeypress: function () {
 	    this.renderModelToDOM();
 	  },
 	  saveButtonClick: function () {
@@ -1838,7 +1884,10 @@
 	  showCompletedToDosButtonClick: function () {
 	    this.renderCompletedToDos = !this.renderCompletedToDos;
 	    this.renderModelToDOM();
-	    this.updateLSFromModel();
+	  },
+	  showAllToDosButtonClick: function () {
+	    this.showAllToDos = !this.showAllToDos;
+	    this.renderModelToDOM();
 	  },
 	  upvoteToDoButtonClick: function () {
 	    this.renderModelToDOM();
@@ -1857,6 +1906,26 @@
 	  searchFilterKeyup: function () {
 	    this.renderModelToDOM();
 	  },
+	  noneFilterClick: function () {
+	    this.filteredImportance.none = !this.filteredImportance.none;
+	    this.renderModelToDOM();
+	  },
+	  lowFilterClick: function () {
+	    this.filteredImportance.low = !this.filteredImportance.low;
+	    this.renderModelToDOM();
+	  },
+	  normalFilterClick: function () {
+	    this.filteredImportance.normal = !this.filteredImportance.normal;
+	    this.renderModelToDOM();
+	  },
+	  highFilterClick: function () {
+	    this.filteredImportance.high = !this.filteredImportance.high;
+	    this.renderModelToDOM();
+	  },
+	  criticalFilterClick: function () {
+	    this.filteredImportance.critical = !this.filteredImportance.critical;
+	    this.renderModelToDOM();
+	  },
 	  updateLSFromModel: function () {
 	    let newToDos = [];
 	    let newCompletedToDos = [];
@@ -1872,7 +1941,6 @@
 	    let oldToDos = oldToDoList.filter(function (currentToDo) {
 	      return currentToDo.complete === false;
 	    });
-
 	    let activeToDoList = oldToDos.concat(newToDos);
 	    localStorage.setItem("activeToDoList", JSON.stringify(activeToDoList));
 	  },
@@ -1883,17 +1951,14 @@
 	    let oldCompletedToDos = oldCompletedToDoList.filter(function (currentToDo) {
 	      return currentToDo.complete === true;
 	    });
-
 	    let completedToDoList = oldCompletedToDos.concat(newCompletedToDos);
 	    localStorage.setItem("completedToDoList", JSON.stringify(completedToDoList));
 	  },
 	  updateModelFromLS: function () {
-	    retrievedActiveToDoList = JSON.parse(localStorage.getItem('activeToDoList'));
-	    if (retrievedActiveToDoList) {
-	      toDoBox.activeToDoList = retrievedActiveToDoList.map(function (toDo) {
-	        return new ToDo(toDo.title, toDo.body, toDo.importance, toDo.id, toDo.complete);
-	      });
-	    }
+	    this.updateActiveToDoListFromLS();
+	    this.updateCompletedToDoListFromLS();
+	  },
+	  updateActiveToDoListFromLS: function () {
 	    retrievedCompletedToDoList = JSON.parse(localStorage.getItem('completedToDoList'));
 	    if (retrievedCompletedToDoList) {
 	      toDoBox.completedToDoList = retrievedCompletedToDoList.map(function (toDo) {
@@ -1901,17 +1966,109 @@
 	      });
 	    }
 	  },
+	  updateCompletedToDoListFromLS: function () {
+	    retrievedActiveToDoList = JSON.parse(localStorage.getItem('activeToDoList'));
+	    if (retrievedActiveToDoList) {
+	      toDoBox.activeToDoList = retrievedActiveToDoList.map(function (toDo) {
+	        return new ToDo(toDo.title, toDo.body, toDo.importance, toDo.id, toDo.complete);
+	      });
+	    }
+	  },
 	  renderModelToDOM: function () {
 	    this.renderActiveToDosToDOM();
 	    this.renderCompletedToDosToDOM();
+	    this.renderCharacterCounters();
+	    this.setButtonDisabledStatus();
+	  },
+	  setButtonDisabledStatus: function () {
+	    $('#save-button').prop('disabled', Boolean(!($('#title-input').val() && $('#title-input').val().length < 120 && $('#body-input').val() && $('#body-input').val().length < 120)));
+	  },
+	  renderCharacterCounters: function () {
+	    $('#title-input-count').text($('#title-input').val().length);
+	    $('#body-input-count').text($('#body-input').val().length);
 	  },
 	  renderActiveToDosToDOM: function () {
+	    this.resetToDoListHTML();
+	    let toDosFilteredByImportance;
+	    this.filterByImportance();
+	    let toDosFilteredBySearch;
+	    this.filterBySearch();
+	    let toDosSortedById;
+	    this.sortByTimestamp();
+	    this.appendToDosToDOM();
+	  },
+	  resetToDoListHTML: function () {
 	    $('.todo-list').html('');
-	    toDoBox.activeToDoList.forEach(function (toDo) {
-	      $('.todo-list').prepend(toDo.renderToDoToHTML());
+	  },
+	  filterByImportance: function () {
+	    toDosFilteredByImportance = toDoBox.activeToDoList;
+	    if (this.filteredImportance.none || this.filteredImportance.low || this.filteredImportance.normal || this.filteredImportance.high || this.filteredImportance.critical) toDosFilteredByImportance = toDoBox.activeToDoList.filter(function (toDo) {
+	      let none = function () {
+	        if (this.filteredImportance.none === true) {
+	          return 'none';
+	        } else {
+	          return '';
+	        }
+	      }.bind(this)();
+	      let low = function () {
+	        if (this.filteredImportance.low === true) {
+	          return 'low';
+	        } else {
+	          return '';
+	        }
+	      }.bind(this)();
+	      let normal = function () {
+	        if (this.filteredImportance.normal === true) {
+	          return 'normal';
+	        } else {
+	          return '';
+	        }
+	      }.bind(this)();
+	      let high = function () {
+	        if (this.filteredImportance.high === true) {
+	          return 'high';
+	        } else {
+	          return '';
+	        }
+	      }.bind(this)();
+	      let critical = function () {
+	        if (this.filteredImportance.critical === true) {
+	          return 'critical';
+	        } else {
+	          return '';
+	        }
+	      }.bind(this)();
+	      return toDo.importance === none || toDo.importance === low || toDo.importance === normal || toDo.importance === high || toDo.importance === critical;
+	    }, this);
+	  },
+	  filterBySearch: function () {
+	    toDosFilteredBySearch = [];
+	    toDosFilteredByImportance.forEach(function (toDo) {
+	      if (toDo.title.indexOf($('#search-bar').val()) > -1 || toDo.body.indexOf($('#search-bar').val()) > -1) {
+	        toDosFilteredBySearch.push(toDo);
+	      }
 	    });
-	    toDoBox.filterToDos($('#search-bar').val());
-	    $('.todo-section[complete|="true"]').addClass('complete');
+	  },
+	  sortByTimestamp: function () {
+	    toDosSortedById = toDosFilteredBySearch.sort(function (a, b) {
+	      return b.id - a.id;
+	    });
+	  },
+	  appendToDosToDOM: function () {
+	    let count = function () {
+	      if (this.showAllToDos === true) {
+	        return toDosSortedById.length;
+	      }
+	      if (toDosSortedById.length < 10) {
+	        return toDosSortedById.length;
+	      } else {
+	        return 10;
+	      }
+	    }.bind(this)();
+
+	    for (var i = 0; i < count; i++) {
+	      $('.todo-list').append(toDosSortedById[i].renderToDoToHTML());
+	    }
 	  },
 	  renderCompletedToDosToDOM: function () {
 	    if (this.renderCompletedToDos === true) {
@@ -1975,14 +2132,14 @@
 	  },
 	  renderToDoToHTML: function (toDo) {
 	    return `
-	      <section class="todo-section ${ this.completeClass() }" id="${ this.id }" complete="${ this.complete }">
+	      <section class="todo-section ${ this.completeClass() }" id="${ this.id }" importance="${ this.importance }">
 	        <h3 contenteditable="true" class="todo-title">${ this.title }</h3>
-	        <button class="remove-todo"></button>
+	        <button class="remove-todo" tabindex="-1" role="presentation"></button>
 	        <h3 contenteditable="true" class="todo-body"> ${ this.body }</h3>
-	        <button class="complete-task-button"></button>
-	        <div class="vote">
-	          <button class="upvote"></button>
-	          <article class="downvote"></article>
+	        <button class="complete-task-button" tabindex="-1" role="presentation"></button>
+	        <div class="vote" tabindex="0" role="group">
+	          <button class="upvote" tabindex="-1" role="presentation"></button>
+	          <article class="downvote" tabindex="-1" role="presentation"></article>
 	          <p class="importance-control">importance: ${ this.importance }</p>
 	        </div>
 	      </section>
@@ -2031,9 +2188,6 @@
 	  removeToDoButtonClick: function (toDoId) {
 	    this.removeToDo(toDoId);
 	  },
-	  searchFilterKeyup: function (filterWord) {
-	    this.filterToDos(filterWord);
-	  },
 	  addToDo: function (titleText, bodyText) {
 	    let toDo = new ToDo(titleText, bodyText);
 	    this.activeToDoList.push(toDo);
@@ -2055,12 +2209,6 @@
 	    });
 	    foundToDo = activeToDos.concat(completedToDos);
 	    return foundToDo[0];
-	  },
-	  filterToDos: function (filterWord) {
-	    let toDoIDontWant = $('.todo-section:not(:contains(' + filterWord + '))');
-	    let toDoIWant = $('.todo-section:contains(' + filterWord + ')');
-	    toDoIDontWant.hide();
-	    toDoIWant.show();
 	  }
 	};
 
@@ -2455,16 +2603,68 @@
 /* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
-	const dom = __webpack_require__(15);
-	const ToDo = __webpack_require__(56);
-	const toDoBox = __webpack_require__(57);
-	const controller = __webpack_require__(58);
+	const ToDo = __webpack_require__(15);
+	const toDoBox = __webpack_require__(56);
+	const controller = __webpack_require__(57);
 
 /***/ },
 /* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	const assert = __webpack_require__(16).assert;
+	const ToDo = __webpack_require__(4);
+	const toDoBox = __webpack_require__(5);
+
+	describe('Todo | Unit Test', function () {
+	  context('ToDo constructor', function () {
+	    it('is a constructor function', function () {
+	      assert.isFunction(ToDo);
+	    });
+	    it('can instantiate a todo', function () {
+	      assert.isFunction(ToDo);
+	    });
+	    it('has a title', function () {
+	      todo = new ToDo('laundry', 'kids');
+	      assert.equal(todo.title, 'laundry');
+	    });
+	    it('has a body', function () {
+	      todo = new ToDo('laundry', 'kids');
+	      assert.equal(todo.title, 'laundry');
+	    });
+	    it('has a importance', function () {
+	      todo = new ToDo('laundry', 'kids');
+	      assert.equal(todo.importance, 'normal');
+	    });
+	    it('has an id', function () {
+	      todo = new ToDo('laundry', 'kids');
+	      assert.equal(todo.id, Date.now());
+	    });
+	  });
+	  context('updateTitle method', function () {
+	    it('is a method', function () {
+	      todo = new ToDo('laundry', 'kids');
+	      assert.isFunction(todo.updateTitle);
+	    });
+	  });
+	  context('updateBody method', function () {
+	    it('is a method', function () {
+	      todo = new ToDo('laundry', 'kids');
+	      assert.isFunction(todo.updateBody);
+	    });
+	  });
+	  context('updateImportance method', function () {
+	    it('is a method', function () {
+	      todo = new ToDo('laundry', 'kids');
+	      assert.isFunction(todo.updateImportance);
+	    });
+	  });
+	  context('completeToDo method', function () {
+	    it('is a method', function () {
+	      todo = new ToDo('laundry', 'kids');
+	      assert.isFunction(todo.completeToDo);
+	    });
+	  });
+	});
 
 /***/ },
 /* 16 */
@@ -10361,93 +10561,80 @@
 	const ToDo = __webpack_require__(4);
 	const toDoBox = __webpack_require__(5);
 
-	describe('Todo | Unit Test', function () {
-	  context('ToDo constructor', function () {
-	    it('is a constructor function', function () {
-	      assert.isFunction(ToDo);
-	    });
-
-	    it('can instantiate a todo', function () {
-	      assert.isFunction(ToDo);
-	    });
-
-	    it('has a title', function () {
-	      todo = new ToDo('laundry', 'kids');
-	      assert.equal(todo.title, 'laundry');
-	    });
-
-	    it('has a body', function () {
-	      todo = new ToDo('laundry', 'kids');
-	      assert.equal(todo.title, 'laundry');
-	    });
-
-	    it('has a importance', function () {
-	      todo = new ToDo('laundry', 'kids');
-	      assert.equal(todo.importance, 'normal');
-	    });
-
-	    it('has an id', function () {
-	      todo = new ToDo('laundry', 'kids');
-	      assert.equal(todo.id, Date.now());
-	    });
-	  });
-
-	  context('updateTitle method', function () {
-	    it('is a method', function () {
-	      todo = new ToDo('laundry', 'kids');
-	      assert.isFunction(todo.updateTitle);
-	    });
-	  });
-
-	  context('updateBody method', function () {
-	    it('is a method', function () {
-	      todo = new ToDo('laundry', 'kids');
-	      assert.isFunction(todo.updateBody);
-	    });
-	  });
-
-	  context('updateImportance method', function () {
-	    it('is a method', function () {
-	      todo = new ToDo('laundry', 'kids');
-	      assert.isFunction(todo.updateImportance);
-	    });
-	  });
-	});
-
-/***/ },
-/* 57 */
-/***/ function(module, exports, __webpack_require__) {
-
-	const assert = __webpack_require__(16).assert;
-	const ToDo = __webpack_require__(4);
-	const toDoBox = __webpack_require__(5);
-
 	describe('Todo-box | Unit Test', function () {
 	  context('toDoBox Object', function () {
-	    it('has a toDoList array property', function () {
-	      let toDoList = toDoBox.toDoList;
-	      assert.isArray(toDoList);
+	    it('has an activeToDoList array property', function () {
+	      let activeToDoList = toDoBox.activeToDoList;
+	      assert.isArray(activeToDoList);
+	    });
+	    it('has a completedToDoList array property', function () {
+	      let completedToDoList = toDoBox.completedToDoList;
+	      assert.isArray(completedToDoList);
 	    });
 	  });
-
 	  context('addToDo method', function () {
+	    // <<<<<<< HEAD
 	    it('is a method', function () {
 	      assert.isFunction(toDoBox.addToDo);
 	    });
-	  });
+	    // =======
 
+	    it('is a method', function () {
+	      assert.isFunction(toDoBox.addToDo);
+	    });
+
+	    it('adds a ToDo object to the todo list', function () {
+	      toDoBox.toDoList = [];
+	      toDoBox.addToDo('hello', 'world');
+	      assert.isObject(toDoBox.toDoList[0]);
+	      assert.instanceOf(toDoBox.toDoList[0], ToDo);
+	    });
+
+	    it('sets its first parameter to the title property of a todo object', function () {
+	      toDoBox.toDoList = [];
+	      toDoBox.addToDo('hello', 'world');
+	      assert.equal(toDoBox.toDoList[0].title, 'hello');
+	    });
+
+	    it('sets its second parameter to the body property of a todo object', function () {
+	      toDoBox.toDoList = [];
+	      toDoBox.addToDo('hello', 'world');
+	      assert.equal(toDoBox.toDoList[0].body, 'world');
+	    });
+	    // >>>>>>> master
+	  });
 	  context('removeToDo method', function () {
 	    it('is a method', function () {
 	      assert.isFunction(toDoBox.addToDo);
 	    });
-	  });
+	    // <<<<<<< HEAD
+	    // =======
 
+	    it('removes a ToDo object from the todo list', function () {
+	      toDoBox.toDoList = [];
+	      toDoBox.addToDo('hello', 'world');
+	      assert.equal(toDoBox.toDoList.length, 1);
+	      toDoBox.removeToDo(toDoBox.toDoList[0].id);
+	      assert.equal(toDoBox.toDoList.length, 0);
+	    });
+	    // >>>>>>> master
+	  });
 	  context('findToDo method', function () {
 	    it('is a method', function () {
 	      assert.isFunction(toDoBox.findToDo);
 	    });
-	  });
+	    // <<<<<<< HEAD
+	    // =======
 
+	    it('finds a ToDo object in the todo list with a matching id', function () {
+	      toDoBox.toDoList = [];
+	      toDoBox.addToDo('hello', 'world');
+	      var targetToDo = toDoBox.findToDo(toDoBox.toDoList[0].id);
+	      assert.instanceOf(targetToDo, ToDo);
+	      assert.equal(targetToDo.id, toDoBox.toDoList[0].id);
+	    });
+	    // >>>>>>> master
+	  });
 	  context('filterToDos method', function () {
 	    it('is a method', function () {
 	      assert.isFunction(toDoBox.filterToDos);
@@ -10456,7 +10643,7 @@
 	});
 
 /***/ },
-/* 58 */
+/* 57 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var assert = __webpack_require__(16).assert;
@@ -10467,44 +10654,98 @@
 
 	describe('Controller | Unit Tests', function () {
 	  context('updateModelFromLS', function () {
-	    controller.updateModelFromLS();
-
-	    it('should have a method called updateModelFromLS', function () {
+	    it('is a method', function () {
 	      assert.isFunction(controller.updateModelFromLS);
 	    });
-	    if (localStorage.getItem('toDoList')) {
-	      it('if toDoList exists in localStorage, it should set toDoBox.toDoList to parsed ls toDoList', function () {
-	        assert.equal(toDoBox.toDoList.length, JSON.parse(localStorage.getItem('toDoList')).length);
-	      });
-	    }
-	    if (toDoBox.toDoList.length > 0) {
-	      it('Items stored in toDoBox.toDoList from LS should be toDo Objects', function () {
-	        assert.instanceOf(toDoBox.toDoList[0], ToDo);
-	      });
-	    }
 	  });
 	  context('updateLSFromModel', function () {
-	    toDoBox.addToDo('title1', 'body1');
-	    toDoBox.addToDo('title2', 'body2');
-	    toDoBox.addToDo('title3', 'body3');
-	    controller.updateLSFromModel();
-	    console.log(toDoBox.toDoList);
+	    it('is a method', function () {
+	      assert.isFunction(controller.updateLSFromModel);
+	    });
+	  });
+	  context('setToDoListToLS', function () {
+	    it('is a method', function () {
+	      assert.isFunction(controller.setToDoListToLS);
+	    });
+	  });
+	  context('setCompletedToDoListToLS', function () {
+	    it('is a method', function () {
+	      assert.isFunction(controller.setCompletedToDoListToLS);
+	    });
+	  });
+	  context('updateModelFromLS', function () {
+	    it('is a method', function () {
+	      assert.isFunction(controller.updateModelFromLS);
+	    });
+	  });
+	  context('renderActiveToDosToDOM', function () {
+	    it('is a method', function () {
+	      assert.isFunction(controller.renderActiveToDosToDOM);
+	    });
+	  });
+	  context('renderCompletedToDosToDOM', function () {
+	    it('is a method', function () {
+	      assert.isFunction(controller.renderCompletedToDosToDOM);
+	    });
+	  });
+	  context('clearFields', function () {
+	    it('is a method', function () {
+	      assert.isFunction(controller.clearFields);
+	    });
+	  });
+	  context('updateLSFromModel', function () {
 
 	    it('should have a method called updateLSFromModel', function () {
 	      assert.isFunction(controller.updateLSFromModel);
 	    });
 	    it('should save all toDos in toDoList in localStorage', function () {
+	      localStorage.setItem('toDoList', JSON.stringify([]));
+	      toDoBox.toDoList = [];
+	      toDoBox.addToDo('title1', 'body1');
+	      toDoBox.addToDo('title2', 'body2');
+	      toDoBox.addToDo('title3', 'body3');
+	      controller.updateLSFromModel();
+
 	      assert.equal(toDoBox.toDoList.length, JSON.parse(localStorage.getItem('toDoList')).length);
 	    });
 	    it('should preserve the toDo title, body, idea, & quality', function () {
+	      localStorage.setItem('toDoList', JSON.stringify([]));
+	      toDoBox.toDoList = [];
+	      toDoBox.addToDo('title1', 'body1');
+	      toDoBox.addToDo('title2', 'body2');
+	      toDoBox.addToDo('title3', 'body3');
+	      controller.updateLSFromModel();
+
 	      assert.equal(toDoBox.toDoList[1].title, JSON.parse(localStorage.getItem('toDoList'))[1].title);
 	      assert.equal(toDoBox.toDoList[1].body, JSON.parse(localStorage.getItem('toDoList'))[1].body);
 	      assert.equal(toDoBox.toDoList[1].quality, JSON.parse(localStorage.getItem('toDoList'))[1].quality);
 	      assert.equal(toDoBox.toDoList[1].id, JSON.parse(localStorage.getItem('toDoList'))[1].id);
 	    });
 	  });
+	  context('updateModelFromLS', function () {
+
+	    it('should have a method called updateModelFromLS', function () {
+	      assert.isFunction(controller.updateModelFromLS);
+	    });
+	    it('if toDoList exists in localStorage, it should set toDoBox.toDoList to parsed ls toDoList', function () {
+	      localStorage.setItem('toDoList', JSON.stringify([]));
+	      toDoBox.toDoList = [];
+	      toDoBox.addToDo('title1', 'body1');
+	      toDoBox.addToDo('title2', 'body2');
+	      toDoBox.addToDo('title3', 'body3');
+	      controller.updateLSFromModel();
+	      toDoBox.toDoList = [];
+	      controller.updateModelFromLS();
+
+	      assert.equal(toDoBox.toDoList.length, JSON.parse(localStorage.getItem('toDoList')).length);
+	    });
+	    it('Items stored in toDoBox.toDoList from LS should be toDo Objects', function () {
+	      localStorage.setItem('toDoList', JSON.stringify([]));
+
+	      assert.instanceOf(toDoBox.toDoList[0], ToDo);
+	    });
+	  });
 	  context('renderModelToDom', function () {
-	    // console.log(browser.element('.todo-list'));
 	    it('should have a method called renderModelToDom', function () {
 	      assert.isFunction(controller.renderModelToDom);
 	    });
@@ -10512,7 +10753,7 @@
 	});
 
 /***/ },
-/* 59 */
+/* 58 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {process.nextTick(function() {
@@ -10523,10 +10764,10 @@
 			mocha.run();
 	});
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(60)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(59)))
 
 /***/ },
-/* 60 */
+/* 59 */
 /***/ function(module, exports) {
 
 	// shim for using process in browser
