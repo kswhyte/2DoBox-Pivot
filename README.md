@@ -7,3 +7,6 @@ At the start to this project, we inherited someone’s previous [ideaBox](https:
 This project utilizes Webpack & it’s awesome development server. We kept accessibility in mind here, as this project was largely graded on how accessible the users felt the UI was. We also implemented feature tests using selenium webdriver.
 
 Ian and I took an approach that caused us to refactor all of the code under the MVC model in which a controller handles all the function calls, and components on the DOM (or Model) are updated and created with their own logic separated. All of the UX/UI was handled in the View in which we housed our JQuery calls. We also used sass for the first time to organize our CSS styling. We took a stronger approach towards OOP in this rendition and housed all of this code in a new repo: [ideaBox-OOJS](https://github.com/kswhyte/idea-box-oojs)
+
+---
+See the Live Version of [2DoList](https://kswhyte.github.io/2DoBox-Pivot/).
