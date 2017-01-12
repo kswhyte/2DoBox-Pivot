@@ -14,4 +14,6 @@ See the Live Version of [2DoList](https://kswhyte.github.io/2DoBox-Pivot/).
 
 <img width="1261" alt="screen shot 2017-01-11 at 10 17 08 pm" src="https://cloud.githubusercontent.com/assets/13802107/21877962/200bf7b6-d84c-11e6-97c8-b0ac59158f11.png">
 
+---
+
 <img width="964" alt="screen shot 2017-01-11 at 10 19 42 pm" src="https://cloud.githubusercontent.com/assets/13802107/21877964/243f5bd4-d84c-11e6-8608-49fc5adaa2be.png">
